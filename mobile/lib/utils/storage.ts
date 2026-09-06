@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const PREFIX = 'hawwely:';
+import { STORAGE_PREFIX } from '@/constants';
+
+const PREFIX = STORAGE_PREFIX;
 
 export interface CachedValue<T> {
   value: T;

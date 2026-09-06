@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { ChevronDown } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
+import { QUICK_AMOUNTS } from '@/constants';
 import { colors, radius, fonts } from '@/theme';
 import { Text } from '@/components/ui/Text';
 import { Button } from '@/components/ui/Button';
@@ -15,12 +16,6 @@ import { CURRENCY_META, MAX_AMOUNT } from '@/lib/shared/constants';
 import { formatEgp, formatNumber, groupDigits, parseAmount } from '@/lib/shared/formatters';
 import { useLang } from '@/lib/hooks/useLang';
 import { haptic } from '@/lib/utils/haptics';
-
-const QUICK: Record<string, number[]> = {
-  default: [500, 1000, 2000, 5000],
-  KWD: [50, 100, 150, 300],
-  JOD: [100, 200, 300, 500],
-};
 
 /** Hero comparison form: country picker (modal) + amount + quick chips + CTA. */
 export function CompareForm({ compact }: { compact?: boolean }) {
@@ -59,7 +54,7 @@ export function CompareForm({ compact }: { compact?: boolean }) {
     setTimeout(() => setLoading(false), 600);
   }
 
-  const quick = QUICK[currency] ?? QUICK.default;
+  const quick = QUICK_AMOUNTS[currency] ?? QUICK_AMOUNTS.default;
   const symbol = CURRENCY_META[currency]?.symbol ?? currency;
 
   return (

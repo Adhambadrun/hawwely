@@ -1,3 +1,4 @@
+import { NOTIFICATION_CHANNEL_ID } from '@/constants';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants';
@@ -14,7 +15,7 @@ Notifications.setNotificationHandler({
   }),
 });
 
-export const RATE_ALERT_CHANNEL = 'rate-alerts';
+export const RATE_ALERT_CHANNEL = NOTIFICATION_CHANNEL_ID;
 
 export async function ensureNotificationChannel() {
   if (Platform.OS !== 'android') return;

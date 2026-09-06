@@ -201,7 +201,9 @@
     "targetRequired": "من فضلك اكتب السعر المطلوب",
     "targetInvalid": "اكتب رقم صحيح أكبر من صفر",
     "quickTargets": "اقتراحات",
-    "activeCount": "{{count}} تنبيه نشط"
+    "activeCount": "{{count}} تنبيه نشط",
+    "distance": "باقي {{percent}}% على الهدف (السعر دلوقتي {{rate}})",
+    "triggeredAt": "اتحقق يوم {{date}} عند {{rate}}"
   },
   "profile": {
     "title": "حسابي",

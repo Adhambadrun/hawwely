@@ -201,7 +201,9 @@
     "targetRequired": "Please enter a target rate",
     "targetInvalid": "Enter a valid number greater than zero",
     "quickTargets": "Suggestions",
-    "activeCount": "{{count}} active alerts"
+    "activeCount": "{{count}} active alerts",
+    "distance": "{{percent}}% away from target (now {{rate}})",
+    "triggeredAt": "Triggered on {{date}} at {{rate}}"
   },
   "profile": {
     "title": "Profile",

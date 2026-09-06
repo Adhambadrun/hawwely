@@ -3,35 +3,33 @@ import { Alert, StyleSheet, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BellPlus, BellRing, Trash2 } from 'lucide-react-native';
+import { BellPlus, BellRing } from 'lucide-react-native';
 import { colors } from '@/theme';
 import { Screen } from '@/components/layout/Screen';
 import { ErrorView } from '@/components/layout/ErrorView';
 import { Text } from '@/components/ui/Text';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
-import { Flag } from '@/components/ui/Flag';
+import { AlertCard } from '@/components/alerts/AlertCard';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { toast } from '@/components/ui/Toast';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { useAsyncData } from '@/lib/hooks/useAsyncData';
 import { deleteAlert, listAlerts } from '@/lib/api/alerts';
-import { getCorridorById } from '@/lib/api/client';
-import { formatDate, formatRate } from '@/lib/shared/formatters';
-import { useLang } from '@/lib/hooks/useLang';
+import { fetchRates } from '@/lib/api/client';
 import { useStore, type LocalAlert } from '@/store/useStore';
 import { haptic } from '@/lib/utils/haptics';
 
 export default function AlertsScreen() {
   const { t } = useTranslation();
-  const lang = useLang();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { user, loading: authLoading } = useAuth();
   const localAlerts = useStore((s) => s.localAlerts);
   const alerts = useAsyncData(() => listAlerts(user?.id ?? null), [user?.id, localAlerts.length]);
+  const rates = useAsyncData(() => fetchRates(), []);
+  const rateFor = (currency: string) => rates.data?.rates.find((r) => r.currency === currency)?.mid_market_rate ?? null;
 
   useFocusEffect(
     useCallback(() => {
@@ -100,34 +98,9 @@ export default function AlertsScreen() {
           <Text variant="caption" color={colors.textSecondary} style={{ marginBottom: 8 }}>
             {t('alerts.activeCount', { count: active.length })}
           </Text>
-          {items.map((a) => {
-            const corridor = getCorridorById(a.corridor_id);
-            return (
-              <Card key={a.id} style={styles.alert}>
-                <View style={styles.row}>
-                  <Flag emoji={corridor?.flag_emoji ?? '🌍'} size={26} />
-                  <View style={{ flex: 1 }}>
-                    <Text variant="bodyBold">
-                      {corridor ? (lang === 'ar' ? corridor.send_country_ar : corridor.send_country) : a.currency} → 🇪🇬
-                    </Text>
-                    <Text variant="small" color={colors.textSecondary}>
-                      {t('alerts.notifyWhen')} {a.direction === 'above' ? t('alerts.goesAbove') : t('alerts.goesBelow')}{' '}
-                      <Text variant="numSmall" ltr>
-                        {formatRate(a.target_rate, lang)}
-                      </Text>
-                    </Text>
-                    <Text variant="caption" color={colors.textMuted}>
-                      {formatDate(a.created_at, lang)}
-                    </Text>
-                  </View>
-                  <View style={{ alignItems: 'flex-end', gap: 8 }}>
-                    {a.is_active ? <Badge label={`🟡 ${t('alerts.waiting')}`} tone="warning" /> : <Badge label={`✅ ${t('alerts.triggered')}`} tone="success" />}
-                    <Button title={t('alerts.delete')} variant="ghost" size="sm" icon={<Trash2 size={14} color={colors.danger} />} onPress={() => confirmDelete(a)} style={{ paddingHorizontal: 8 }} />
-                  </View>
-                </View>
-              </Card>
-            );
-          })}
+          {items.map((a) => (
+            <AlertCard key={a.id} alert={a} currentRate={rateFor(a.currency)} onDelete={confirmDelete} />
+          ))}
         </>
       )}
     </Screen>

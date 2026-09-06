@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { MAX_RECENT_COMPARISONS } from '@/constants';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { PayoutMethod, SendCurrency } from '@/lib/shared/types';
@@ -101,7 +102,7 @@ export const useStore = create<StoreState>()(
       setPushToken: (pushToken) => set({ pushToken }),
       pushRecent: (r) =>
         set((s) => ({
-          recent: [r, ...s.recent.filter((x) => !(x.currency === r.currency && x.amount === r.amount))].slice(0, 5),
+          recent: [r, ...s.recent.filter((x) => !(x.currency === r.currency && x.amount === r.amount))].slice(0, MAX_RECENT_COMPARISONS),
         })),
       addLocalAlert: (a) => set((s) => ({ localAlerts: [a, ...s.localAlerts] })),
       removeLocalAlert: (id) => set((s) => ({ localAlerts: s.localAlerts.filter((a) => a.id !== id) })),
