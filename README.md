@@ -128,6 +128,19 @@ scripts/               # generate-seed-sql.ts, generate-assets.ts
 2. `vercel.json` schedules `update-rates` (`*/30 * * * *`) and `check-alerts` (`5,35 * * * *`); set `CRON_SECRET` in the project.
 3. Add your domain to `NEXT_PUBLIC_APP_URL` and to Supabase Auth redirect URLs.
 
+## Mobile app (Expo)
+
+The native Android/iOS companion lives in [`mobile/`](mobile/README.md) — Expo SDK 52 + Expo Router,
+same Supabase project and the same `/api/*` routes as this site, Arabic-first with full RTL, offline cache,
+push rate alerts and `hawwely://` deep links that mirror the web URLs.
+
+```bash
+cd mobile && npm install && cp .env.example .env && npm run assets && npx expo start
+```
+
+Pure TypeScript modules (types, calculator, formatters, constants, demo data) are shared with the website via
+`npm run sync:shared`, which copies them into `mobile/lib/shared/` — edit the website copy and re-sync.
+
 ## Disclaimer
 
 حوّلي لا يقوم بتحويل الأموال. نحن منصة مقارنة مستقلة. الأسعار المعروضة للإرشاد فقط وقد تختلف عند التحويل الفعلي.
