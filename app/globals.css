@@ -1,0 +1,309 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ */
+/* Fonts (self-hosted, variable weight) — Cairo for Arabic, Inter for  */
+/* Latin. Both are loaded on every page; the browser picks glyphs per   */
+/* unicode-range so Arabic pages still render Latin numerals in Inter.  */
+/* ------------------------------------------------------------------ */
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 1000;
+  src: url('/fonts/cairo-arabic-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F,
+    U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 1000;
+  src: url('/fonts/cairo-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 1000;
+  src: url('/fonts/cairo-latin-ext-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/inter-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/inter-latin-ext-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@layer base {
+  :root {
+    --font-cairo: 'Cairo';
+    --font-inter: 'Inter';
+    --color-primary: 0 200 83;
+    --color-navy: 27 42 74;
+    --color-gold: 255 215 0;
+    --header-height: 4rem;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
+  }
+
+  html[dir='rtl'] {
+    --slide-from: -16px;
+  }
+
+  body {
+    @apply bg-surface text-content antialiased;
+    font-feature-settings: 'kern', 'liga', 'calt';
+    min-height: 100dvh;
+  }
+
+  html[lang='ar'] body {
+    font-family: var(--font-cairo), var(--font-inter), system-ui, sans-serif;
+  }
+  html[lang='en'] body {
+    font-family: var(--font-inter), var(--font-cairo), system-ui, sans-serif;
+  }
+
+  /* Numbers always in Inter for a cleaner, tabular look */
+  .tabular,
+  .num {
+    font-family: var(--font-inter), var(--font-cairo), system-ui, sans-serif;
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  ::selection {
+    @apply bg-primary/20 text-navy;
+  }
+
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-surface;
+  }
+
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  /* Range slider */
+  input[type='range'] {
+    @apply h-2 w-full cursor-pointer appearance-none rounded-pill bg-navy-100;
+  }
+  input[type='range']::-webkit-slider-thumb {
+    @apply h-6 w-6 cursor-grab appearance-none rounded-full border-4 border-white bg-primary shadow-card transition-transform;
+  }
+  input[type='range']::-webkit-slider-thumb:active {
+    @apply scale-110 cursor-grabbing;
+  }
+  input[type='range']::-moz-range-thumb {
+    @apply h-6 w-6 cursor-grab rounded-full border-4 border-white bg-primary shadow-card;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .container-content {
+    @apply mx-auto w-full max-w-content px-4 sm:px-6;
+  }
+
+  .section {
+    @apply py-section-m md:py-section;
+  }
+
+  .section-title {
+    @apply text-section-m font-bold text-navy md:text-section;
+  }
+
+  .section-subtitle {
+    @apply mt-3 max-w-2xl text-body text-content-secondary;
+  }
+
+  .card {
+    @apply rounded-card border border-card-border bg-card p-6 shadow-card;
+  }
+
+  .card-hover {
+    @apply transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-hover;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-btn px-5 py-2.5 text-small font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary text-white shadow-[0_4px_14px_rgba(0,200,83,0.35)] hover:bg-primary-600 hover:shadow-[0_6px_20px_rgba(0,200,83,0.45)] active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply btn bg-navy text-white hover:bg-navy-800 active:scale-[0.98];
+  }
+
+  .btn-outline {
+    @apply btn border border-card-border bg-white text-navy hover:border-primary hover:text-primary-700 active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply btn text-navy hover:bg-navy-50 active:scale-[0.98];
+  }
+
+  .btn-lg {
+    @apply px-7 py-3.5 text-body;
+  }
+
+  .btn-sm {
+    @apply px-3.5 py-2 text-caption;
+  }
+
+  .input {
+    @apply w-full rounded-btn border border-card-border bg-white px-4 py-3 text-body text-content placeholder:text-content-secondary/60 transition-colors focus:border-primary focus:ring-2 focus:ring-primary/30 disabled:bg-surface;
+  }
+
+  .input-error {
+    @apply border-danger focus:border-danger focus:ring-danger/30;
+  }
+
+  .label {
+    @apply mb-1.5 block text-small font-semibold text-navy;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-pill px-2.5 py-0.5 text-caption font-semibold;
+  }
+  .badge-success {
+    @apply bg-primary-50 text-primary-700;
+  }
+  .badge-gold {
+    @apply bg-gold/20 text-navy;
+  }
+  .badge-info {
+    @apply bg-navy-50 text-navy;
+  }
+  .badge-warning {
+    @apply bg-warning/15 text-amber-700;
+  }
+  .badge-danger {
+    @apply bg-danger/10 text-danger;
+  }
+
+  /* Range slider used by the savings calculator (dark background) */
+  .range-slider {
+    @apply h-2 w-full cursor-pointer appearance-none rounded-pill bg-white/20 outline-none;
+    background-image: linear-gradient(90deg, #00c853 0%, #00e676 var(--range-progress, 50%), transparent var(--range-progress, 50%));
+  }
+  .range-slider::-webkit-slider-thumb {
+    @apply h-6 w-6 appearance-none rounded-full border-4 border-white bg-gold shadow-card transition-transform;
+  }
+  .range-slider::-webkit-slider-thumb:hover,
+  .range-slider:focus-visible::-webkit-slider-thumb {
+    transform: scale(1.15);
+  }
+  .range-slider::-moz-range-thumb {
+    @apply h-6 w-6 rounded-full border-4 border-white bg-gold shadow-card;
+  }
+  .range-slider:focus-visible {
+    @apply ring-2 ring-primary/60;
+  }
+
+  .skeleton {
+    @apply relative overflow-hidden rounded-btn bg-navy-100/60;
+    background-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s linear infinite;
+  }
+
+  .hero-dots {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .prose-hawwely {
+    @apply prose prose-slate max-w-none prose-headings:font-bold prose-headings:text-navy prose-a:text-primary-700 prose-a:no-underline hover:prose-a:underline prose-strong:text-navy prose-blockquote:border-primary prose-blockquote:bg-primary-50/60 prose-blockquote:py-1 prose-blockquote:not-italic prose-th:text-start prose-td:text-start prose-img:rounded-card;
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .rank-gold {
+    @apply border-transparent shadow-gold;
+  }
+  .rank-silver {
+    @apply border-transparent shadow-silver;
+  }
+  .rank-bronze {
+    @apply border-transparent shadow-bronze;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  .animation-delay-100 {
+    animation-delay: 100ms;
+  }
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+  .pause-on-hover:hover {
+    animation-play-state: paused;
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+}
