@@ -31,7 +31,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       template: locale === 'ar' ? '%s | حوّلي' : '%s | Hawwely',
     },
     applicationName: 'Hawwely',
-    manifest: '/manifest.json',
+    manifest: '/manifest.webmanifest',
     appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: locale === 'ar' ? 'حوّلي' : 'Hawwely' },
     icons: {
       icon: [

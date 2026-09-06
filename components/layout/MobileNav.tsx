@@ -6,9 +6,10 @@ import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/navigation';
 import { LanguageSwitch } from './LanguageSwitch';
 import { cn } from '@/lib/utils/helpers';
-import type { NavItem } from './nav-items';
+import { NAV_ITEMS } from './nav-items';
 
-export function MobileNav({ items }: { items: NavItem[] }) {
+export function MobileNav() {
+  const items = NAV_ITEMS;
   const t = useTranslations('nav');
   const [open, setOpen] = useState(false);
   const pathname = usePathname();

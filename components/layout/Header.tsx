@@ -5,7 +5,6 @@ import { CurrencyBanner } from './CurrencyBanner';
 import { HeaderNav } from './HeaderNav';
 import { LanguageSwitch } from './LanguageSwitch';
 import { MobileNav } from './MobileNav';
-import { NAV_ITEMS } from './nav-items';
 
 export async function Header() {
   const locale = await getLocale();
@@ -24,7 +23,7 @@ export async function Header() {
             <Link href="/compare" className="btn-primary hidden sm:inline-flex">
               {t('compareNow')}
             </Link>
-            <MobileNav items={NAV_ITEMS} />
+            <MobileNav />
           </div>
         </div>
       </header>

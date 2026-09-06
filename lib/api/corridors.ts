@@ -16,17 +16,24 @@ function mergeSeed(row: Partial<Corridor> & { send_currency: string }): Corridor
   } as Corridor;
 }
 
+/** Replace the `{year}` token used in seeded SEO titles/descriptions. */
+function withYear(c: Corridor): Corridor {
+  const year = String(new Date().getFullYear());
+  const sub = (v: string | null) => (v ? v.replace(/\{year\}/g, year) : v);
+  return { ...c, seo_title: sub(c.seo_title), seo_title_ar: sub(c.seo_title_ar), seo_description: sub(c.seo_description), seo_description_ar: sub(c.seo_description_ar) };
+}
+
 export async function getCorridors(): Promise<Corridor[]> {
   return cached('corridors:all', TTL.catalog, async () => {
     const supabase = createPublicClient();
-    if (!supabase) return CORRIDORS.filter((c) => c.is_active).sort((a, b) => a.popularity_rank - b.popularity_rank);
+    if (!supabase) return CORRIDORS.filter((c) => c.is_active).sort((a, b) => a.popularity_rank - b.popularity_rank).map(withYear);
 
     const { data, error } = await supabase.from('corridors').select('*').eq('is_active', true).order('popularity_rank');
     if (error || !data || data.length === 0) {
       if (error) console.warn('[hawwely] corridors query failed, using seed:', error.message);
-      return CORRIDORS.filter((c) => c.is_active);
+      return CORRIDORS.filter((c) => c.is_active).map(withYear);
     }
-    return (data as (Partial<Corridor> & { send_currency: string })[]).map(mergeSeed);
+    return (data as (Partial<Corridor> & { send_currency: string })[]).map(mergeSeed).map(withYear);
   });
 }
 

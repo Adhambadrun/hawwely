@@ -112,8 +112,8 @@ export async function getCorridorSummaries(): Promise<{ summaries: CorridorRateS
     const mid = cr[0]?.mid_market_rate ?? BASELINE_MID_MARKET[corridor.send_currency];
     const best = cr.reduce<Rate | null>((b, r) => (b == null || r.exchange_rate > b.exchange_rate ? r : b), null);
     const history = await getRateHistory(corridor, 2, undefined, 24);
-    const first = history[0]?.mid_market_rate ?? mid;
-    const dayPoints = history.slice(-24);
+    const dayPoints = history.slice(-25);
+    const first = dayPoints[0]?.mid_market_rate ?? mid;
     const high = dayPoints.length ? Math.max(...dayPoints.map((p) => p.mid_market_rate)) : mid;
     const low = dayPoints.length ? Math.min(...dayPoints.map((p) => p.mid_market_rate)) : mid;
     const bestService = best ? byId.get(best.service_id) ?? null : null;

@@ -29,11 +29,19 @@ export function cacheSet<T>(key: string, value: T, ttlMs: number): T {
   return value;
 }
 
+const inflight = new Map<string, Promise<unknown>>();
+
+/** Memoise `loader` for `ttlMs`; concurrent callers share one in-flight promise. */
 export async function cached<T>(key: string, ttlMs: number, loader: () => Promise<T>): Promise<T> {
   const hit = cacheGet<T>(key);
   if (hit !== undefined) return hit;
-  const value = await loader();
-  return cacheSet(key, value, ttlMs);
+  const pending = inflight.get(key) as Promise<T> | undefined;
+  if (pending) return pending;
+  const p = loader()
+    .then((value) => cacheSet(key, value, ttlMs))
+    .finally(() => inflight.delete(key));
+  inflight.set(key, p);
+  return p;
 }
 
 export function cacheDelete(prefix: string): void {

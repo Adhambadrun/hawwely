@@ -12,7 +12,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "seed:sql": "tsx scripts/generate-seed-sql.ts",
-    "assets:icons": "tsx scripts/generate-icons.ts"
+    "assets": "tsx scripts/generate-assets.ts"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",

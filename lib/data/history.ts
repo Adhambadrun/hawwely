@@ -16,11 +16,12 @@ export function buildDemoHistory(
 ): RateHistoryPoint[] {
   const total = Math.max(2, Math.round(days * pointsPerDay));
   const rand = seededRandom(fnv1a(`${currency}:${days}:${markupPercent}`));
-  const volatility = 0.0035; // ~0.35% daily
+  // ~0.35% daily volatility, scaled down for intraday resolution.
+  const volatility = 0.0035 / Math.sqrt(pointsPerDay);
   const steps: number[] = [];
   let level = 0;
   for (let i = 0; i < total; i++) {
-    level += (rand() - 0.5) * 2 * volatility + Math.sin(i / 6) * 0.0006;
+    level += (rand() - 0.5) * 2 * volatility + (Math.sin(i / (6 * pointsPerDay)) * 0.0006) / pointsPerDay;
     steps.push(level);
   }
   // Anchor the last point at 0 so the series ends exactly at endRate.
