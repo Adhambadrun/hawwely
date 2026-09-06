@@ -1,0 +1,28 @@
+{
+  "cli": { "version": ">= 12.0.0", "appVersionSource": "remote" },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": { "buildType": "apk" },
+      "env": { "EXPO_PUBLIC_API_URL": "https://hawwely.com" }
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": { "buildType": "apk" },
+      "channel": "preview",
+      "env": { "EXPO_PUBLIC_API_URL": "https://hawwely.com" }
+    },
+    "production": {
+      "autoIncrement": true,
+      "channel": "production",
+      "android": { "buildType": "app-bundle" },
+      "env": { "EXPO_PUBLIC_API_URL": "https://hawwely.com" }
+    }
+  },
+  "submit": {
+    "production": {
+      "android": { "track": "internal", "serviceAccountKeyPath": "./google-service-account.json" }
+    }
+  }
+}
